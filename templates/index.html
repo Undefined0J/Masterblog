@@ -18,6 +18,14 @@
         <h2>{{ post.title }}</h2>
         <p><em>Written by {{ post.author }}</em></p>
         <p>{{ post.content }}</p>
+
+        <div style="text-align: right; margin-top: 15px;">
+            <a href="{{ url_for('delete', post_id=post.id) }}"
+               style="color: #D9534F; text-decoration: none; font-weight: bold;"
+               onclick="return confirm('Are you sure you want to delete this post?');">
+                Delete Post
+            </a>
+        </div>
     </div>
     {% endfor %}
 

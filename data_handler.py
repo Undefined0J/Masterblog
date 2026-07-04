@@ -66,3 +66,23 @@ def add_post(author: str, title: str, content: str) -> None:
 
     posts.append(new_post)
     save_posts(posts)
+
+
+def delete_post(post_id: int) -> bool:
+    """
+    Delete a blog post by its unique ID from the JSON data file.
+
+    :param post_id: The unique identifier of the post to delete.
+    :return: True if the post was found and deleted, False otherwise.
+    """
+    posts = load_posts()
+    initial_count = len(posts)
+
+    # Filter out the post with the matching ID
+    posts = [post for post in posts if post["id"] != post_id]
+
+    # If the count didn't change, the ID was not found
+    if len(posts) == initial_count:
+        return False
+
+    return save_posts(posts)

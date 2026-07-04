@@ -46,6 +46,24 @@ def add():
     return render_template('add.html')
 
 
+@app.route('/delete/<int:post_id>')
+def delete(post_id: int):
+    """
+    Handle the deletion of a specific blog post.
+
+    Extracts the post_id from the URL, removes it from the data store,
+    and redirects back to the index page.
+
+    :param post_id: The unique ID of the blog post to be deleted.
+    :return: A redirection to the index route.
+    """
+    # Trigger the deletion logic in data handler
+    data_handler.delete_post(post_id)
+
+    # Redirect back to the home page to reflect changes
+    return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
     # Run the Flask development server
     app.run(host="0.0.0.0", port=5000, debug=True)
