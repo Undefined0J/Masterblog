@@ -4,7 +4,7 @@ Data access layer for the Masterblog application.
 
 import json
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 DATA_FILE = "posts.json"
 
@@ -86,3 +86,37 @@ def delete_post(post_id: int) -> bool:
         return False
 
     return save_posts(posts)
+
+
+def get_post_by_id(post_id: int) -> Optional[Dict[str, Any]]:
+    """
+    Retrieve a single blog post by its unique ID.
+
+    :param post_id: The unique identifier of the post.
+    :return: The post dictionary if found, None otherwise.
+    """
+    posts = load_posts()
+    for post in posts:
+        if post["id"] == post_id:
+            return post
+    return None
+
+
+def update_post(post_id: int, author: str, title: str, content: str) -> bool:
+    """
+    Update the core details of an existing blog post.
+
+    :param post_id: The unique identifier of the post to modify.
+    :param author: The updated name of the author.
+    :param title: The updated title of the post.
+    :param content: The updated content body.
+    :return: True if the post was found and updated, False otherwise.
+    """
+    posts = load_posts()
+    for post in posts:
+        if post["id"] == post_id:
+            post["author"] = author
+            post["title"] = title
+            post["content"] = content
+            return save_posts(posts)
+    return False
