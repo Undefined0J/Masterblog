@@ -64,6 +64,36 @@ def delete(post_id: int):
     return redirect(url_for('index'))
 
 
+@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+def update(post_id: int):
+    """
+    Handle the retrieval and modification of a specific blog post.
+
+    GET request: Renders the edit form pre-populated with current post data.
+    POST request: Extracts updated form entries, saves them, and redirects home.
+
+    :param post_id: The unique ID of the blog post to update.
+    :return: HTML response or a redirection to the index route.
+    """
+    # Fetch the specific post from the JSON database
+    post = data_handler.get_post_by_id(post_id)
+    if post is None:
+        return "Post not found", 404
+
+    if request.method == 'POST':
+        # Extract and sanitize the updated inputs
+        author = request.form.get('author', '').strip()
+        title = request.form.get('title', '').strip()
+        content = request.form.get('content', '').strip()
+
+        # Simple validation before triggering backend storage update
+        if author and title and content:
+            data_handler.update_post(post_id, author, title, content)
+            return redirect(url_for('index'))
+
+    # Render form pre-populated with data
+    return render_template('update.html', post=post)
+
 if __name__ == '__main__':
     # Run the Flask development server
     app.run(host="0.0.0.0", port=5000, debug=True)
